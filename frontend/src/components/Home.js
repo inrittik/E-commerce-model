@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Corousel from './Carousel/Carousel';
 import Card from './Card/Card';
 import cardData from './Card/CardDetails';
 import ProductCard from './products/productCard';
-import productDetails from './products/productsDetails';
+// import productDetails from './products/productsDetails';
 import Footer from './Footer';
-// const container = {
-//   justifyContent: 'space-around',
-//   flexWrap: 'wrap'
-// }
+
+
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  useEffect(()=>{
+    axios("/api/products")
+      .then(response=>{
+        setProducts(response.data);
+      })
+  }, [])
     return (
         <>
         <div className="container mt-1" style={{maxWidth: "90vw"}}>
@@ -25,8 +31,8 @@ export default function Home() {
         </div>
         <div className="cardSection" style={{justifyContent: "space-around"}}>
           {
-            productDetails.products.map((product)=>(
-              <ProductCard title={product.prodName} description={product.brand} image={product.image}/>
+            products.map((product)=>(
+              <ProductCard title={product.prodName} description={product.brand} image={product.image} product={product}/>
             )
             )
           }    
